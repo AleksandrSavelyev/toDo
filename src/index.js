@@ -1,38 +1,31 @@
-class Wiev {
+
+class View {
     constructor() {
+        this._addTask = null;
         this._bodyTask = null;
         this._entryText = null;
-        this._addTask = null;
 
         this.init();
     }
 
     init = () => {
-        this._bodyTask = document.createElement('li');
-        this._entryText = document.getElementById('inputText');
         this._addTask = document.getElementById('add');
+        this._bodyTask = document.querySelector('ul');
+        this._entryText = document.getElementById('inputText');
         this._addTask.addEventListener('click', this.createTask)
-
+        this._bodyTask.addEventListener('click',this.checkedTask)
     };
 
-    getValue = () => {
-        const val = this._entryText.value
-
-        return val;
-    };
+    getValue = () => this._entryText.value;
 
     createTask = () => {
-        let txt = this.getValue();
+        const txt = this.getValue();
+
         if (txt.length > 0) {
-            let ul = document.getElementById('list');
-            let li = document.createElement('li');
-            li.appendChild(this.addCloseBut());
-            let liTxt = document.createTextNode(txt);
-            li.appendChild(liTxt);
-            ul.appendChild(li);
+            this.createTaskElement(txt);
         } else {
             alert('пустое значение');
-        }
+        }   
         
         this.closeTask();
         this.cleareValue();
@@ -43,31 +36,37 @@ class Wiev {
     };
 
     closeTask = () => {
-        let close = document.getElementsByClassName('close');
+        const close = document.querySelectorAll('.close');
         
-        for(let i = 0; i < close.length; i++) {
-            close[i].onclick = function() {
-                let div = this.parentElement;
-                div.style.display = "none";
-            }
+            close.forEach(closeButton => {
+                closeButton.onclick = function () {
+                    this.parentElement.remove();
+                }
+            });
         }
-    }
 
     addCloseBut = () => {
-        let span = document.createElement("SPAN");
-        let closeBut = document.createTextNode("\u00D7");
+        const span = document.createElement("SPAN");
+        const closeBut = document.createTextNode("\u00D7");
         span.className = "close";
         span.appendChild(closeBut);
 
         return span;
     }
+
+    checkedTask = (ev) => {
+        if (ev.target.tagName === 'LI') {
+            ev.target.classList.toggle('checked');
+        }
+    }
+
+    createTaskElement = (txt) => {
+        const li = document.createElement('li');
+        li.appendChild(this.addCloseBut());
+        const liTxt = document.createTextNode(txt);
+        li.appendChild(liTxt);
+        this._bodyTask.appendChild(li);
+    }
 }
 
-new Wiev;
-
-const list = document.querySelector('ul');
-list.addEventListener('click', function(ev) {
-    if (ev.target.tagName === 'LI') {
-        ev.target.classList.toggle('checked');
-    }
-}, false);
+new View();

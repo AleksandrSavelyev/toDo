@@ -12,8 +12,8 @@ class View {
         this._addTask = document.getElementById('add');
         this._bodyTask = document.querySelector('ul');
         this._entryText = document.getElementById('inputText');
-        this._addTask.addEventListener('click', this.createTask)
-        this._bodyTask.addEventListener('click',this.checkedTask)
+        this._addTask.addEventListener('click', this.createTask);
+        this._bodyTask.addEventListener('click',this.checkedTask);
     };
 
     getValue = () => this._entryText.value;
